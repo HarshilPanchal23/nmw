@@ -2,8 +2,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Provider } from 'react-redux';
-import { store } from '../store/store';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,7 +29,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
       >
         {children}
       </body>

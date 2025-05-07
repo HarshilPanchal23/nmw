@@ -7,13 +7,8 @@ export default function DashboardPage() {
 
   // Redirect to login if not authenticated
 
-  const handleLogout = () => {
-    router.push('/login');
-  };
-
   return (
     <>
-
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <select className="bg-white text-gray-700 rounded px-3 py-2 text-sm border border-gray-300 focus:outline-none shadow-sm w-full max-w-xs">

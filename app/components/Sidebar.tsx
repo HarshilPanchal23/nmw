@@ -45,7 +45,7 @@ export default function Sidebar() {
   const toggle = (label: string) => setOpen((o) => ({ ...o, [label]: !o[label] }));
 
   return (
-    <aside className="w-64 bg-white  flex flex-col min-h-screen">
+    <aside className="w-64 min-w-64 bg-white  flex flex-col min-h-screen">
       <div className="min-h-16 flex items-center px-6 font-bold text-lg bg-indigo-500 ">NMW</div>
       <nav className="flex-1 shadow-lg px-2 py-4 space-y-2">
         {menu.map((item) =>
