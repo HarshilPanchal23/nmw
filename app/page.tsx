@@ -5,5 +5,6 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 
 export default function Home({ children }: { children: ReactNode }) {// NOTE: this immediately redirects on render (not recommended for layout/pages)
+  redirect('/login')
   return <Provider store={store}>{children}</Provider>;
 }
