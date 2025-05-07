@@ -7,7 +7,10 @@ const menu = [
   { label: "Dashboard", icon: "dashboard", href: "/dashboard" },
   { label: "Media", icon: "perm_media", href: "/media" },
   { label: "News Alerts", icon: "notifications", href: "/news-alerts" },
-  { label: "Upload", icon: "cloud_upload", href: "/upload" },
+  { label: "Upload", icon: "cloud_upload",  children: [
+    { label: "Upload News Clips", href: "/upload/upload-news-clip" },
+    { label: "Upload News Paper", href: "/upload/upload-news-paper" },
+  ]},
   { label: "Search", icon: "search", href: "/search" },
   {
     label: "Reports", icon: "description", children: [
