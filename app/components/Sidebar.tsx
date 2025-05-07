@@ -45,9 +45,9 @@ export default function Sidebar() {
   const toggle = (label: string) => setOpen((o) => ({ ...o, [label]: !o[label] }));
 
   return (
-    <aside className="w-64 bg-white border-r flex flex-col min-h-screen">
-      <div className="h-16 flex items-center px-6 font-bold text-lg border-b">NMW</div>
-      <nav className="flex-1 px-2 py-4 space-y-2">
+    <aside className="w-64 bg-white  flex flex-col min-h-screen">
+      <div className="h-16 flex items-center px-6 font-bold text-lg bg-indigo-500 border-b">NMW</div>
+      <nav className="flex-1 border-r px-2 py-4 space-y-2">
         {menu.map((item) =>
           item.children ? (
             <div key={item.label}>
