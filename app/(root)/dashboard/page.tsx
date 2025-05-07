@@ -1,76 +1,26 @@
 'use client'
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from 'next/navigation';
+import Select from "react-select";
+import {ministries,Option} from "@/app/enum/ministry";
+
 
 export default function DashboardPage() {
   const router = useRouter();
-
+  const [selectedMinistry, setSelectedMinistry] = useState<Option | null>(null);
   // Redirect to login if not authenticated
 
   return (
     <>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Dashboard</h1>
-        <select className="bg-white text-gray-700 rounded px-3 py-2 text-sm border border-gray-300 focus:outline-none shadow-sm w-full max-w-xs">
-          <option>All Ministries</option>
-          <option>Ministry of Consumer Affairs Food and Public Distribution System</option>
-          <option>Ministry of Culture</option>
-          <option>Ministry of Defence</option>
-          <option>Ministry of Development of North Eastern Region</option>
-          <option>Ministry of Earth Sciences</option>
-          <option>Ministry of Education</option>
-          <option>Ministry of Electronics and Information Technology</option>
-          <option>Ministry of Environment Forest and Climate Change</option>
-          <option>Ministry of Finance</option>
-          <option>Ministry of Food Processing Industries</option>
-          <option>Ministry of Health and Family Welfare</option>
-          <option>Ministry of Heavy Industries</option>
-          <option>Ministry of Home Affairs</option>
-          <option>Ministry of Housing and UrbanAffairs</option>
-          <option>Ministry of Information and Broadcasting</option>
-          <option>Ministry of JalShakti</option>
-          <option>Ministry of Labour and Employment</option>
-          <option>Ministry of Law and Justice</option>
-          <option>Ministry of Micro Small and Medium Enterprises</option>
-          <option>Ministry of Mines</option>
-          <option>Ministry of Minority Affairs</option>
-          <option>Ministry of New and Renewable Energy</option>
-          <option>Ministry of Panchayati Raj</option>
-          <option>Ministry of Parliamentary Affairs</option>
-          <option>Ministry of Personnel Public Grievances and Pensions</option>
-          <option>Ministry of Petroleum and NaturalGas</option>
-          <option>Ministry of Ports Shipping and Waterways</option>
-          <option>Ministry of Power</option>
-          <option>Ministry of Railways</option>
-          <option>Ministry of Road Transport and Highways</option>
-          <option>Ministry of Rural Development</option>
-          <option>Ministry of Science and Technology</option>
-          <option>Ministry of Skill Development and Entrepreneurship</option>
-          <option>Ministry of Social Justice and Empowerment</option>
-          <option>Ministry of Statistics and Programme Implementation</option>
-          <option>Ministry of Steel</option>
-          <option>Ministry of Textiles</option>
-          <option>Ministry of Tourism</option>
-          <option>Ministry of Tribal Affairs</option>
-          <option>Ministry of Women and Child Development</option>
-          <option>Ministry of Youth Affairs and Sports</option>
-          <option>Ministry of External Affairs</option>
-          <option>PrimeMinister's Office</option>
-          <option>Ministry of Agriculture and Farmers' Welfare</option>
-          <option>Ministry of Animal Husbandry Dairying and Fisheries</option>
-          <option>Ministry of Chemicals and Fertilizers</option>
-          <option>Ministry Of Preschools</option>
-          <option>Ministry of Coal</option>
-          <option>Ministry of Commerce and Industry</option>
-          <option>Ministry of Ayush</option>
-          <option>Ministry of Corporate Affairs</option>
-          <option>Niti Aayog Yojana</option>
-          <option>Health Department</option>
-          <option>Examination Ministry</option>
-          <option>Ministry of Communications</option>
-          <option>Forest Ministry of India</option>
-          <option>Ministry of Forest</option>
-        </select>
+        <Select<Option>
+          options={ministries}
+          className="min-w-[300px]"
+              value={selectedMinistry}
+              onChange={(newValue) => setSelectedMinistry(newValue)}
+              placeholder="Select Ministry"
+            />
       </div>
       {/* Dashboard content skeleton here */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">

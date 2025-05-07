@@ -1,12 +1,15 @@
 'use client'
+import Pagination from "@/app/components/elements/Pagination";
 import DynamicTable, { Column } from "@/app/components/elements/Table";
-import React from "react";
+import React, { useState } from "react";
+import Select, { MultiValue, ActionMeta } from 'react-select';
+import { ministries,Option } from "@/app/enum/ministry";
 const columns: Column[] = [
   { columnKey: "id", columnLabel: "News ID" },
   { columnKey: "headline", columnLabel: "Headline",
     render: (value) =>
-      <div title={value} className="text-xs w-[200px] text-nowrap text-ellipsis whitespace-nowrap overflow-hidden font-semibold">{value}</div>,
-    minWidth: "200px"
+      <div title={value} className="text-xs w-[380px] text-nowrap text-ellipsis whitespace-nowrap overflow-hidden font-semibold">{value}</div>,
+    minWidth: "400px"
    },
   { columnKey: "date", columnLabel: "Date" },
   { columnKey: "ccm", columnLabel: "Ccm" },
@@ -37,65 +40,36 @@ const actions = (row: any) => (
 );
 
 
-const ministries = [
-  "All Ministries",
-  "Ministry of Consumer Affairs Food and Public Distribution System",
-  "Ministry of Culture",
-  "Ministry of Defence",
-  "Ministry of Development of North Eastern Region",
-  "Ministry of Earth Sciences",
-  "Ministry of Education",
-  "Ministry of Electronics and Information Technology",
-  "Ministry of Environment Forest and Climate Change",
-  "Ministry of Finance",
-  "Ministry of Food Processing Industries",
-  "Ministry of Health and Family Welfare",
-  "Ministry of Heavy Industries",
-  "Ministry of Home Affairs",
-  "Ministry of Housing and UrbanAffairs",
-  "Ministry of Information and Broadcasting",
-  "Ministry of JalShakti",
-  "Ministry of Labour and Employment",
-  "Ministry of Law and Justice",
-  "Ministry of Micro Small and Medium Enterprises",
-  "Ministry of Mines",
-  "Ministry of Minority Affairs",
-  "Ministry of New and Renewable Energy",
-  "Ministry of Panchayati Raj",
-  "Ministry of Parliamentary Affairs",
-  "Ministry of Personnel Public Grievances and Pensions",
-  "Ministry of Petroleum and NaturalGas",
-  "Ministry of Ports Shipping and Waterways",
-  "Ministry of Power",
-  "Ministry of Railways",
-  "Ministry of Road Transport and Highways",
-  "Ministry of Rural Development",
-  "Ministry of Science and Technology",
-  "Ministry of Skill Development and Entrepreneurship",
-  "Ministry of Social Justice and Empowerment",
-  "Ministry of Statistics and Programme Implementation",
-  "Ministry of Steel",
-  "Ministry of Textiles",
-  "Ministry of Tourism",
-  "Ministry of Tribal Affairs",
-  "Ministry of Women and Child Development",
-  "Ministry of Youth Affairs and Sports",
-  "Ministry of External Affairs",
-  "PrimeMinister's Office",
-  "Ministry of Agriculture and Farmers' Welfare",
-  "Ministry of Animal Husbandry Dairying and Fisheries",
-  "Ministry of Chemicals and Fertilizers",
-  "Ministry Of Preschools",
-  "Ministry of Coal",
-  "Ministry of Commerce and Industry",
-  "Ministry of Ayush",
-  "Ministry of Corporate Affairs",
-  "Niti Aayog Yojana",
-  "Health Department",
-  "Examination Ministry",
-  "Ministry of Communications",
-  "Forest Ministry of India",
-  "Ministry of Forest",
+const zones: Option[] = [
+  { value: 'east', label: 'East' },
+  { value: 'west', label: 'West' },
+  { value: 'north', label: 'North' },
+  { value: 'south', label: 'South' },
+  { value: 'central', label: 'Central' }
+];
+
+const languages: Option[] = [
+  { value: 'eng', label: 'English' },
+  { value: 'hin', label: 'Hindi' },
+  { value: 'mar', label: 'Marathi' },
+  { value: 'guj', label: 'Gujarati' },
+  { value: 'ben', label: 'Bengali' }
+];
+
+const publications: Option[] = [
+  { value: 'financial_express', label: 'Financial Express' },
+  { value: 'times_of_india', label: 'Times of India' },
+  { value: 'hindustan_times', label: 'Hindustan Times' },
+  { value: 'the_hindu', label: 'The Hindu' },
+  { value: 'indian_express', label: 'Indian Express' }
+];
+
+const editions: Option[] = [
+  { value: 'delhi', label: 'Delhi' },
+  { value: 'mumbai', label: 'Mumbai' },
+  { value: 'bangalore', label: 'Bangalore' },
+  { value: 'chennai', label: 'Chennai' },
+  { value: 'kolkata', label: 'Kolkata' }
 ];
 
 const tableData = [
@@ -167,33 +141,56 @@ const tableData = [
 ];
 
 export default function MediaPage() {
+  const [selectedZones, setSelectedZones] = useState<Option[]>([]);
+  const [selectedLanguages, setSelectedLanguages] = useState<Option[]>([]);
+  const [selectedPublications, setSelectedPublications] = useState<Option[]>([]);
+  const [selectedEditions, setSelectedEditions] = useState<Option[]>([]);
+  const [selectedMinistry, setSelectedMinistry] = useState<Option | null>(null);
+  const handleChange = (
+    newValue: MultiValue<Option>,
+    actionMeta: ActionMeta<Option>,
+    setSelected: React.Dispatch<React.SetStateAction<Option[]>>
+  ) => {
+    setSelected(newValue as Option[]);
+  };
+
   return (
     <>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Media</h1>
         <div className="flex gap-2 items-center">
-        <button className="ml-auto bg-blue-600 text-white px-4 py-[6px] rounded shadow">Apply Filter</button>
-        <select className="bg-white text-gray-700 rounded px-3 py-2 text-sm border border-gray-300 focus:outline-none shadow-sm w-full max-w-xs">
-          {ministries.map((ministry) => (
-            <option key={ministry}>{ministry}</option>
-          ))}
-        </select>
+          <button className="ml-auto bg-blue-600 text-white px-4 py-[6px] rounded shadow">Show Analytics</button>
+          <Select<Option>
+          options={ministries}
+          className="min-w-[300px]"
+              value={selectedMinistry}
+              onChange={(newValue) => setSelectedMinistry(newValue)}
+              placeholder="Select Ministry"
+            />
         </div>
       </div>
       {/* Filters */}
       <div className="bg-white rounded-lg shadow p-4 mb-4">
-        <div className=" grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label className="block text-xs text-gray-500 mb-1">Zone</label>
-            <select className="w-full border rounded px-2 py-2 text-sm">
-              <option>All Zones</option>
-            </select>
+            <Select<Option, true>
+              isMulti
+              options={zones}
+              value={selectedZones}
+              onChange={(newValue, actionMeta) => handleChange(newValue, actionMeta, setSelectedZones)}
+              placeholder="Select Zones"
+            />
           </div>
           <div>
             <label className="block text-xs text-gray-500 mb-1">Language</label>
-            <select className="w-full border rounded px-2 py-2 text-sm">
-              <option>All Languages</option>
-            </select>
+            <Select<Option, true>
+              isMulti
+              options={languages}
+              value={selectedLanguages}
+              onChange={(newValue, actionMeta) => handleChange(newValue, actionMeta, setSelectedLanguages)}
+              placeholder="Select Languages"
+            />
           </div>
           <div>
             <label className="block text-xs text-gray-500 mb-1">Date Range</label>
@@ -230,15 +227,23 @@ export default function MediaPage() {
       <div className="bg-white rounded-lg shadow p-4 mb-4 grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label className="block text-xs text-gray-500 mb-1">Publication</label>
-          <select className="w-full border rounded px-2 py-2 text-sm">
-            <option>All Publications</option>
-          </select>
+          <Select<Option, true>
+            isMulti
+            options={publications}
+            value={selectedPublications}
+            onChange={(newValue, actionMeta) => handleChange(newValue, actionMeta, setSelectedPublications)}
+            placeholder="Select Publications"
+          />
         </div>
         <div>
           <label className="block text-xs text-gray-500 mb-1">Edition</label>
-          <select className="w-full border rounded px-2 py-2 text-sm">
-            <option>All Editions</option>
-          </select>
+          <Select<Option, true>
+            isMulti
+            options={editions}
+            value={selectedEditions}
+            onChange={(newValue, actionMeta) => handleChange(newValue, actionMeta, setSelectedEditions)}
+            placeholder="Select Editions"
+          />
         </div>
       </div>
       {/* Action Buttons */}
@@ -260,8 +265,17 @@ export default function MediaPage() {
         </button>
       </div>
       {/* Table */}
-      <div className="py-2  bg-white shadow">
+      <div className="py-2 rounded-lg  bg-white shadow">
         <DynamicTable tableData={tableData} handleSelect={(e) => console.log(e)} columns={columns} rowActions={actions} />
+         <div className="flex  px-4 pt-2 justify-end">
+            <Pagination 
+             currentPage={1}
+             onPageChange={()=>{}}
+             onPageSize={()=>{}}
+             pageSize={5}
+             totalPages={10}
+            />
+         </div>
       </div>
     </>
   );

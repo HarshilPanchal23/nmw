@@ -37,7 +37,7 @@ const DynamicTable = ({ columns = [], tableData = [], handleSelect, rowActions }
 
   return (
     <div className="bg-white">
-      <div className="overflow-x-auto min-w-full">
+      <div className="overflow-x-auto w-200 min-w-full">
         <table className="text-sm w-full">
           <thead>
             <tr className="bg-gray-50">
@@ -64,7 +64,7 @@ const DynamicTable = ({ columns = [], tableData = [], handleSelect, rowActions }
               )}
             </tr>
           </thead>
-          <tbody className="max-h-[700px] bg-red-300 min-h-[500px] overflow-y-auto">
+          <tbody className="max-h-[700px]  min-h-[500px] overflow-y-auto">
             {tableData.map((row, rowIdx) => (
               <tr key={row.id || rowIdx} className="border-b hover:bg-gray-50">
                 {handleSelect && (
