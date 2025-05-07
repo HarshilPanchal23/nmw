@@ -5,7 +5,6 @@ import React from "react";
 export default function Header() {
   return (
     <header className="h-16 bg-indigo-500 flex items-center justify-end px-6 text-white">
-      {/* <div className="font-semibold text-xl">Dashboard</div> */}
       <span className="flex items-center gap-6">
         <span>English</span>
         <span className="relative">
