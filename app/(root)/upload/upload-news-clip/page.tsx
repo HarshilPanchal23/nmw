@@ -1,5 +1,66 @@
 import React from "react";
 
+const ministries = [
+  "All Ministries",
+  "Ministry of Consumer Affairs Food and Public Distribution System",
+  "Ministry of Culture",
+  "Ministry of Defence",
+  "Ministry of Development of North Eastern Region",
+  "Ministry of Earth Sciences",
+  "Ministry of Education",
+  "Ministry of Electronics and Information Technology",
+  "Ministry of Environment Forest and Climate Change",
+  "Ministry of Finance",
+  "Ministry of Food Processing Industries",
+  "Ministry of Health and Family Welfare",
+  "Ministry of Heavy Industries",
+  "Ministry of Home Affairs",
+  "Ministry of Housing and UrbanAffairs",
+  "Ministry of Information and Broadcasting",
+  "Ministry of JalShakti",
+  "Ministry of Labour and Employment",
+  "Ministry of Law and Justice",
+  "Ministry of Micro Small and Medium Enterprises",
+  "Ministry of Mines",
+  "Ministry of Minority Affairs",
+  "Ministry of New and Renewable Energy",
+  "Ministry of Panchayati Raj",
+  "Ministry of Parliamentary Affairs",
+  "Ministry of Personnel Public Grievances and Pensions",
+  "Ministry of Petroleum and NaturalGas",
+  "Ministry of Ports Shipping and Waterways",
+  "Ministry of Power",
+  "Ministry of Railways",
+  "Ministry of Road Transport and Highways",
+  "Ministry of Rural Development",
+  "Ministry of Science and Technology",
+  "Ministry of Skill Development and Entrepreneurship",
+  "Ministry of Social Justice and Empowerment",
+  "Ministry of Statistics and Programme Implementation",
+  "Ministry of Steel",
+  "Ministry of Textiles",
+  "Ministry of Tourism",
+  "Ministry of Tribal Affairs",
+  "Ministry of Women and Child Development",
+  "Ministry of Youth Affairs and Sports",
+  "Ministry of External Affairs",
+  "PrimeMinister's Office",
+  "Ministry of Agriculture and Farmers' Welfare",
+  "Ministry of Animal Husbandry Dairying and Fisheries",
+  "Ministry of Chemicals and Fertilizers",
+  "Ministry Of Preschools",
+  "Ministry of Coal",
+  "Ministry of Commerce and Industry",
+  "Ministry of Ayush",
+  "Ministry of Corporate Affairs",
+  "Niti Aayog Yojana",
+  "Health Department",
+  "Examination Ministry",
+  "Ministry of Communications",
+  "Forest Ministry of India",
+  "Ministry of Forest",
+];
+
 export default function UploadNewsClipPage() {
   return (
     <div className="p-6">
@@ -9,7 +70,9 @@ export default function UploadNewsClipPage() {
           <div>
             <label className="block text-xs text-gray-500 mb-1">Ministry</label>
             <select className="w-full border rounded px-2 py-2 text-sm">
-              <option>Select Ministry</option>
+              {ministries.map((ministry) => (
+                <option key={ministry}>{ministry}</option>
+              ))}
             </select>
           </div>
           <div>
@@ -31,7 +94,11 @@ export default function UploadNewsClipPage() {
           <div>
             <label className="block text-xs text-gray-500 mb-1">Zone</label>
             <select className="w-full border rounded px-2 py-2 text-sm">
-              <option>Select Zone</option>
+              <option>East</option>
+              <option>West</option>
+              <option>North</option>
+              <option>South</option>
+              <option>Central</option>
             </select>
           </div>
           <div>

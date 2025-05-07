@@ -46,7 +46,11 @@ export default function SearchPage() {
           <div>
             <label className="block text-xs text-gray-500 mb-1">Zone</label>
             <select className="w-full border rounded px-2 py-2 text-sm">
-              <option>Select Zone</option>
+              <option>East</option>
+              <option>West</option>
+              <option>North</option>
+              <option>South</option>
+              <option>Central</option>
             </select>
           </div>
           <div>
