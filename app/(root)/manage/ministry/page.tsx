@@ -1,10 +1,19 @@
 'use client';
+import Pagination from '@/app/components/elements/Pagination';
+import DynamicTable, { Column } from '@/app/components/elements/Table';
 import React, { useState } from 'react';
 
-const initialMinistries = [
+type keyword = string[]
+interface initialMinistries {
+  name: string;
+  keywords: keyword;
+}
+
+
+const initialMinistries: initialMinistries[] = [
   {
     name: 'Ministry of Defence',
-    keywords: ['army', 'defence', 'border', 'MoD']
+    keywords: ['army', 'defence', 'border', 'MoD','army', 'defence', 'border', 'MoD','army', 'defence', 'border', 'MoD','army', 'defence', 'border', 'MoD','army', 'defence', 'border', 'MoD']
   },
   {
     name: 'Ministry of Education',
@@ -15,6 +24,23 @@ const initialMinistries = [
     keywords: ['budget', 'tax', 'finance', 'economy']
   }
 ];
+
+
+const columns: Column[] = [
+  { columnKey: "name", columnLabel: "Ministry Name", isSticky: true },
+  {
+    columnKey: "keywords", columnLabel: "Headline",
+    render: (value: keyword) => <div className="flex gap-2 flex-wrap">
+      {
+        value.map((kw, i) => (
+          <span key={i} className="bg-blue-100 text-blue-700 rounded px-2 py-0.5 text-xs">{kw}</span>
+        ))
+      }
+    </div>
+
+  }
+];
+
 
 const ministryOptions = [
   'Ministry of Defence',
@@ -118,7 +144,7 @@ export default function MinistryPage() {
   };
 
   return (
-    <div className="p-6">
+    <div>
       {/* Add/Edit Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
@@ -168,7 +194,7 @@ export default function MinistryPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
           <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-md flex flex-col">
             <h2 className="text-xl font-bold mb-4">Delete Ministry</h2>
-            <p className="mb-4">Are you sure you want to delete <span className="font-bold">{ministries[deleteIdx].name}</span>?<br/>This action cannot be undone.</p>
+            <p className="mb-4">Are you sure you want to delete <span className="font-bold">{ministries[deleteIdx].name}</span>?<br />This action cannot be undone.</p>
             <div className="flex justify-end gap-2">
               <button onClick={() => setDeleteModalOpen(false)} className="bg-gray-200 text-gray-700 px-6 py-2 rounded font-semibold">Cancel</button>
               <button onClick={handleDelete} className="bg-red-500 text-white px-6 py-2 rounded font-semibold">Delete</button>
@@ -189,37 +215,60 @@ export default function MinistryPage() {
           </button>
         </div>
       </div>
-      <div className="bg-white rounded-lg shadow p-4 overflow-x-auto">
-        <table className="min-w-full text-sm">
-          <thead>
-            <tr className="bg-gray-50">
-              <th className="px-4 py-2 text-left font-semibold">Ministry Name</th>
-              <th className="px-4 py-2 text-left font-semibold">Keywords</th>
-              <th className="px-4 py-2 text-left font-semibold">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ministries.map((row, idx) => (
-              <tr key={idx} className="border-b hover:bg-gray-50 align-top">
-                <td className="px-4 py-2 font-semibold whitespace-nowrap">{row.name}</td>
-                <td className="px-4 py-2">
-                  <div className="flex flex-wrap gap-1">
-                    {row.keywords.map((kw, i) => (
-                      <span key={i} className="bg-blue-100 text-blue-700 rounded px-2 py-0.5 text-xs">{kw}</span>
-                    ))}
-                  </div>
-                </td>
-                <td className="px-4 py-2">
-                  <div className="flex gap-2">
-                    <span className="material-icons text-yellow-600 cursor-pointer" onClick={() => openEditModal(idx)}>edit</span>
-                    <span className="material-icons text-red-500 cursor-pointer" onClick={() => openDeleteModal(idx)}>delete</span>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Table */}
+      <div className="py-2 rounded-lg  bg-white shadow">
+        <DynamicTable tableData={initialMinistries} columns={columns} rowActions={(row: initialMinistries, idx: number) =>
+          <div className="flex gap-2">
+            <span className="material-icons text-yellow-600 cursor-pointer" onClick={() => openEditModal(idx)}>edit</span>
+            <span className="material-icons text-red-500 cursor-pointer" onClick={() => openDeleteModal(idx)}>delete</span>
+          </div>
+        } />
+        <div className="flex  px-4 pt-2 justify-end">
+          <Pagination
+            currentPage={1}
+            onPageChange={() => { }}
+            onPageSize={() => { }}
+            pageSize={5}
+            totalPages={10}
+          />
+        </div>
       </div>
+
     </div>
   );
-} 
+}
+
+
+
+
+// <div className="bg-white rounded-lg shadow p-4 overflow-x-auto">
+// <table className="min-w-full text-sm">
+//   <thead>
+//     <tr className="bg-gray-50">
+//       <th className="px-4 py-2 text-left font-semibold">Ministry Name</th>
+//       <th className="px-4 py-2 text-left font-semibold">Keywords</th>
+//       <th className="px-4 py-2 text-left font-semibold">Actions</th>
+//     </tr>
+//   </thead>
+//   <tbody>
+//     {ministries.map((row, idx) => (
+//       <tr key={idx} className="border-b hover:bg-gray-50 align-top">
+//         <td className="px-4 py-2 font-semibold whitespace-nowrap">{row.name}</td>
+//         <td className="px-4 py-2">
+//           <div className="flex flex-wrap gap-1">
+//             {row.keywords.map((kw, i) => (
+//               <span key={i} className="bg-blue-100 text-blue-700 rounded px-2 py-0.5 text-xs">{kw}</span>
+//             ))}
+//           </div>
+//         </td>
+//         <td className="px-4 py-2">
+//           <div className="flex gap-2">
+//             <span className="material-icons text-yellow-600 cursor-pointer" onClick={() => openEditModal(idx)}>edit</span>
+//             <span className="material-icons text-red-500 cursor-pointer" onClick={() => openDeleteModal(idx)}>delete</span>
+//           </div>
+//         </td>
+//       </tr>
+//     ))}
+//   </tbody>
+// </table>
+// </div>

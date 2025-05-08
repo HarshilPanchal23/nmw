@@ -6,6 +6,7 @@ export type Column = {
   columnKey: string;
   isSticky?: boolean;
   minWidth?: string;
+  maxWidth ?: string;
   render?: (value: any, row: any) => React.ReactNode;
 };
 
@@ -13,7 +14,7 @@ type TableProps = {
   columns?: Column[];
   tableData: any[];
   handleSelect?: (selectedIds: string[]) => void;
-  rowActions?: (row: any) => React.ReactNode;
+  rowActions?: (row: any,rowIdx:number) => React.ReactNode;
 };
 
 const DynamicTable = ({ columns = [], tableData = [], handleSelect, rowActions }: TableProps) => {
@@ -38,7 +39,7 @@ const DynamicTable = ({ columns = [], tableData = [], handleSelect, rowActions }
   return (
     <div className="bg-white">
       <div className="overflow-x-auto w-200 min-w-full">
-        <table className="text-sm w-full">
+        <table className="text-sm w-full overflow-hidden">
           <thead>
             <tr className="bg-gray-50">
               {handleSelect && (
@@ -54,6 +55,7 @@ const DynamicTable = ({ columns = [], tableData = [], handleSelect, rowActions }
                     left: col.isSticky ? 0 : undefined,
                     right: col.isSticky ? 0 : undefined,
                     minWidth: col.minWidth || "auto",
+                    maxWidth:col.maxWidth || "auto"
                   }}
                 >
                  <div className="text-nowrap overflow-hidden text-ellipsis w-full"> {col.columnLabel || col.columnKey}</div>
@@ -93,7 +95,7 @@ const DynamicTable = ({ columns = [], tableData = [], handleSelect, rowActions }
                 ))}
                 {rowActions && (
                   <td className="px-4 sticky right-0 bg-white">
-                    {rowActions(row)}
+                    {rowActions(row,rowIdx)}
                   </td>
                 )}
               </tr>

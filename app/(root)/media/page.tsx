@@ -4,8 +4,9 @@ import DynamicTable, { Column } from "@/app/components/elements/Table";
 import React, { useState } from "react";
 import Select, { MultiValue, ActionMeta } from 'react-select';
 import { ministries,Option } from "@/app/enum/ministry";
+
 const columns: Column[] = [
-  { columnKey: "id", columnLabel: "News ID" },
+  { columnKey: "id", columnLabel: "News ID",isSticky:true },
   { columnKey: "headline", columnLabel: "Headline",
     render: (value) =>
       <div title={value} className="text-xs w-[380px] text-nowrap text-ellipsis whitespace-nowrap overflow-hidden font-semibold">{value}</div>,
