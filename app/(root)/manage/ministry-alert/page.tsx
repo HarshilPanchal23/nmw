@@ -1,4 +1,6 @@
 'use client'
+import Pagination from "@/app/components/elements/Pagination";
+import DynamicTable, { Column } from "@/app/components/elements/Table";
 import React, { useState } from "react";
 
 const ministryList = [
@@ -9,7 +11,71 @@ const ministryList = [
   "Ministry of Law and Justice"
 ];
 
-const initialAlerts = [
+const columns: Column[] = [
+  {
+    columnKey: "ministry",
+    columnLabel: "Ministry Name",
+    isSticky: true,
+    minWidth:"200px",
+    render: (value: string) => <span className="font-medium text-gray-900">{value}</span>
+  },
+  {
+    columnKey: "critical",
+    columnLabel: "Critical",
+    minWidth:"300px",
+    render: (value: string[]) => (
+      <div className="flex gap-2 flex-wrap">
+        {value.map((kw, i) => (
+          <span key={kw + i} className="bg-red-100 text-red-700 rounded px-2 py-0.5 text-xs">{kw}</span>
+        ))}
+      </div>
+    )
+  },
+  {
+    columnKey: "high",
+    columnLabel: "High",
+    minWidth:"300px",
+    render: (value: string[]) => (
+      <div className="flex gap-2 flex-wrap">
+        {value.map((kw, i) => (
+          <span key={kw + i} className="bg-orange-100 text-orange-700 rounded px-2 py-0.5 text-xs">{kw}</span>
+        ))}
+      </div>
+    )
+  },
+  {
+    columnKey: "low",
+    columnLabel: "Low",
+    minWidth:"300px",
+    render: (value: string[]) => (
+      <div className="flex gap-2 flex-wrap">
+        {value.map((kw, i) => (
+          <span key={kw + i} className="bg-yellow-100 text-yellow-700 rounded px-2 py-0.5 text-xs">{kw}</span>
+        ))}
+      </div>
+    )
+  },
+  {
+    columnKey: "lastUpdated",
+    columnLabel: "Last Updated",
+    render: (value: string) =>
+      value ? (
+        <span className="text-gray-600 text-sm">{value}</span>
+      ) : (
+        <span className="text-gray-400 text-sm italic">Not available</span>
+      )
+  }
+];
+
+export interface MinistryAlert {
+  ministry: string;
+  critical: string[];
+  high: string[];
+  low: string[];
+  lastUpdated: string;
+}
+
+const initialAlerts:MinistryAlert[] = [
   {
     ministry: "Ministry of Defence",
     critical: ["PoK", "jammu", "Attack", "terror attack", "army", "risk", "pakistan", "defence", "MoD", "kill", "deal"],
@@ -132,7 +198,7 @@ export default function MinistryAlertPage() {
   };
 
   return (
-    <div className="p-6">
+    <div>
       {/* Add/Edit Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
@@ -228,55 +294,25 @@ export default function MinistryAlertPage() {
           </button>
         </div>
       </div>
-      <div className="bg-white rounded-lg shadow p-4 overflow-x-auto">
-        <table className="min-w-full text-sm">
-          <thead>
-            <tr className="bg-gray-50">
-              <th className="px-4 py-2 text-left font-semibold">Ministry Name</th>
-              <th className="px-4 py-2 text-left font-semibold">Critical</th>
-              <th className="px-4 py-2 text-left font-semibold">High</th>
-              <th className="px-4 py-2 text-left font-semibold">Low</th>
-              <th className="px-4 py-2 text-left font-semibold">Last Updated</th>
-              <th className="px-4 py-2 text-left font-semibold">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {alerts.map((row, idx) => (
-              <tr key={idx} className="border-b hover:bg-gray-50 align-top">
-                <td className="px-4 py-2 font-semibold whitespace-nowrap">{row.ministry}</td>
-                <td className="px-4 py-2">
-                  <div className="flex flex-wrap gap-1">
-                    {row.critical.map((kw, i) => (
-                      <span key={i} className="bg-red-100 text-red-700 rounded px-2 py-0.5 text-xs">{kw}</span>
-                    ))}
-                  </div>
-                </td>
-                <td className="px-4 py-2">
-                  <div className="flex flex-wrap gap-1">
-                    {row.high.map((kw, i) => (
-                      <span key={i} className="bg-yellow-100 text-yellow-700 rounded px-2 py-0.5 text-xs">{kw}</span>
-                    ))}
-                  </div>
-                </td>
-                <td className="px-4 py-2">
-                  <div className="flex flex-wrap gap-1">
-                    {row.low.map((kw, i) => (
-                      <span key={i} className="bg-yellow-100 text-yellow-700 rounded px-2 py-0.5 text-xs">{kw}</span>
-                    ))}
-                  </div>
-                </td>
-                <td className="px-4 py-2 whitespace-nowrap">{row.lastUpdated}</td>
-                <td className="px-4 py-2">
-                  <div className="flex gap-2">
-                    <span className="material-icons text-yellow-600 cursor-pointer" onClick={() => openEditModal(idx)}>edit</span>
-                    <span className="material-icons text-red-500 cursor-pointer" onClick={() => { setDeleteIdx(idx); setShowDeleteModal(true); }}>delete</span>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {/* Table */}
+      <div className="py-2 rounded-lg  bg-white shadow">
+        <DynamicTable tableData={alerts} columns={columns} rowActions={(row: MinistryAlert, idx: number) =>
+          <div className="flex gap-2">
+            <span className="material-icons text-yellow-600 cursor-pointer" onClick={() => openEditModal(idx)}>edit</span>
+            <span className="material-icons text-red-500 cursor-pointer" onClick={()=>console.log(row,idx)}>delete</span>
+          </div>
+        } />
+        <div className="flex  px-4 pt-2 justify-end">
+          <Pagination
+            currentPage={1}
+            onPageChange={() => { }}
+            onPageSize={() => { }}
+            pageSize={5}
+            totalPages={10}
+          />
+        </div>
       </div>
+
       {/* Delete Alert Keywords Modal */}
       {showDeleteModal && deleteIdx !== null && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

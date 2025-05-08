@@ -68,7 +68,7 @@ const DynamicTable = ({ columns = [], tableData = [], handleSelect, rowActions }
           </thead>
           <tbody className="max-h-[700px]  min-h-[500px] overflow-y-auto">
             {tableData.map((row, rowIdx) => (
-              <tr key={row.id || rowIdx} className="border-b hover:bg-gray-50">
+              <tr key={row.id || rowIdx} className="border-b overflow-hidden hover:bg-gray-50">
                 {handleSelect && (
                   <td className="px-4 sticky left-0 bg-white">
                     <input

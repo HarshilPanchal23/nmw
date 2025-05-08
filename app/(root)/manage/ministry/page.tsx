@@ -10,10 +10,12 @@ interface initialMinistries {
 }
 
 
+
+
 const initialMinistries: initialMinistries[] = [
   {
     name: 'Ministry of Defence',
-    keywords: ['army', 'defence', 'border', 'MoD','army', 'defence', 'border', 'MoD','army', 'defence', 'border', 'MoD','army', 'defence', 'border', 'MoD','army', 'defence', 'border', 'MoD']
+    keywords: ['army', 'defence', 'border', 'MoD']
   },
   {
     name: 'Ministry of Education',
@@ -217,7 +219,7 @@ export default function MinistryPage() {
       </div>
       {/* Table */}
       <div className="py-2 rounded-lg  bg-white shadow">
-        <DynamicTable tableData={initialMinistries} columns={columns} rowActions={(row: initialMinistries, idx: number) =>
+        <DynamicTable tableData={ministries} columns={columns} rowActions={(row: initialMinistries, idx: number) =>
           <div className="flex gap-2">
             <span className="material-icons text-yellow-600 cursor-pointer" onClick={() => openEditModal(idx)}>edit</span>
             <span className="material-icons text-red-500 cursor-pointer" onClick={() => openDeleteModal(idx)}>delete</span>
@@ -237,38 +239,3 @@ export default function MinistryPage() {
     </div>
   );
 }
-
-
-
-
-// <div className="bg-white rounded-lg shadow p-4 overflow-x-auto">
-// <table className="min-w-full text-sm">
-//   <thead>
-//     <tr className="bg-gray-50">
-//       <th className="px-4 py-2 text-left font-semibold">Ministry Name</th>
-//       <th className="px-4 py-2 text-left font-semibold">Keywords</th>
-//       <th className="px-4 py-2 text-left font-semibold">Actions</th>
-//     </tr>
-//   </thead>
-//   <tbody>
-//     {ministries.map((row, idx) => (
-//       <tr key={idx} className="border-b hover:bg-gray-50 align-top">
-//         <td className="px-4 py-2 font-semibold whitespace-nowrap">{row.name}</td>
-//         <td className="px-4 py-2">
-//           <div className="flex flex-wrap gap-1">
-//             {row.keywords.map((kw, i) => (
-//               <span key={i} className="bg-blue-100 text-blue-700 rounded px-2 py-0.5 text-xs">{kw}</span>
-//             ))}
-//           </div>
-//         </td>
-//         <td className="px-4 py-2">
-//           <div className="flex gap-2">
-//             <span className="material-icons text-yellow-600 cursor-pointer" onClick={() => openEditModal(idx)}>edit</span>
-//             <span className="material-icons text-red-500 cursor-pointer" onClick={() => openDeleteModal(idx)}>delete</span>
-//           </div>
-//         </td>
-//       </tr>
-//     ))}
-//   </tbody>
-// </table>
-// </div>
