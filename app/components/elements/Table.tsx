@@ -39,18 +39,18 @@ const DynamicTable = ({ columns = [], tableData = [], handleSelect, rowActions }
   return (
     <div className="bg-white">
       <div className="overflow-x-auto w-200 min-w-full">
-        <table className="text-sm w-full overflow-hidden">
+        <table className="text-sm w-full">
           <thead>
             <tr className="bg-gray-50">
               {handleSelect && (
-                <th className="px-4 py-2 sticky left-0 z-10 bg-gray-50">
+                <th className="px-4 py-2 sticky left-0  bg-gray-50">
                   <input type="checkbox" checked={allSelected} onChange={toggleSelectAll} />
                 </th>
               )}
               {columns.map((col, idx) => (
                 <th
                   key={idx}
-                  className={`px-4 py-2 text-left font-semibold ${col.isSticky ? "sticky z-10 bg-gray-50" : ""}`}
+                  className={`px-4 py-2 text-left overflow-hidden font-semibold ${col.isSticky ? "sticky z-10 bg-gray-50" : ""}`}
                   style={{
                     left: col.isSticky ? 0 : undefined,
                     right: col.isSticky ? 0 : undefined,
@@ -62,7 +62,7 @@ const DynamicTable = ({ columns = [], tableData = [], handleSelect, rowActions }
                 </th>
               ))}
               {rowActions && (
-                <th className="px-4 py-2 sticky right-0 z-10 bg-gray-50 font-semibold">Actions</th>
+                <th className="px-4 py-2 sticky right-0  bg-gray-50 font-semibold">Actions</th>
               )}
             </tr>
           </thead>
