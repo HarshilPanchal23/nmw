@@ -6,9 +6,9 @@ export const createPublication = (publication: any) => {
         body: publication
     })
 }
-export const getPublcation = (pageNumber: number, pageSize: number, sortBy: string = 'id', sortOrder: string = 'asc') => {
+export const getPublcation = (pageNumber: number, pageSize: number, sortBy: string = 'id', sortOrder: string = 'asc', searchValue: string) => {
     return request({
-        url: `publication/list?page_no=${pageNumber}&page_size=${pageSize}&sort_by=${sortBy}&sort_order=${sortOrder}`,
+        url: `publication/list?page_no=${pageNumber}&page_size=${pageSize}&sort_by=${sortBy}&sort_order=${sortOrder}&search=${searchValue}`,
         method: 'GET',
     });
 }
