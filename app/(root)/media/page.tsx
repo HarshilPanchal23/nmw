@@ -4,6 +4,8 @@ import DynamicTable, { Column } from "@/app/components/elements/Table";
 import React, { useState } from "react";
 import Select, { MultiValue, ActionMeta } from 'react-select';
 import { ministries,Option } from "@/app/enum/ministry";
+import { useRouter } from "next/navigation";
+import AddToDraft from "@/app/components/Modal/media/addtoDraft";
 const columns: Column[] = [
   { columnKey: "id", columnLabel: "News ID" },
   { columnKey: "headline", columnLabel: "Headline",
@@ -141,11 +143,15 @@ const tableData = [
 ];
 
 export default function MediaPage() {
+  const router = useRouter();
   const [selectedZones, setSelectedZones] = useState<Option[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<Option[]>([]);
   const [selectedPublications, setSelectedPublications] = useState<Option[]>([]);
   const [selectedEditions, setSelectedEditions] = useState<Option[]>([]);
+  const [selectedNews, setSelectedNews] = useState<string[]>([]);
   const [selectedMinistry, setSelectedMinistry] = useState<Option | null>(null);
+
+  const [isOpen, setIsOpen] = useState(false);
   const handleChange = (
     newValue: MultiValue<Option>,
     actionMeta: ActionMeta<Option>,
@@ -153,6 +159,12 @@ export default function MediaPage() {
   ) => {
     setSelected(newValue as Option[]);
   };
+  
+  const handleAddToDraft = () => {
+    if (selectedNews.length === 0) return;
+    setIsOpen(true);
+  };
+  
 
   return (
     <>
@@ -257,7 +269,7 @@ export default function MediaPage() {
         <button className="bg-gray-200 text-gray-500 px-4 py-2 rounded flex items-center gap-2" disabled>
           <span className="material-icons">share</span> Share Dossier
         </button>
-        <button className="bg-gray-200 text-gray-500 px-4 py-2 rounded flex items-center gap-2" disabled>
+        <button className="bg-blue-500  px-4 py-2 rounded flex items-center gap-2 disabled:bg-gray-200 text-black" disabled={!selectedNews.length} onClick={handleAddToDraft}>
           <span className="material-icons">drafts</span> Add to Draft
         </button>
         <button className="bg-gray-200 text-gray-500 px-4 py-2 rounded flex items-center gap-2" disabled>
@@ -266,7 +278,7 @@ export default function MediaPage() {
       </div>
       {/* Table */}
       <div className="py-2 rounded-lg  bg-white shadow">
-        <DynamicTable tableData={tableData} handleSelect={(e) => console.log(e)} columns={columns} rowActions={actions} />
+        <DynamicTable tableData={tableData} handleSelect={(e) => setSelectedNews(e)} columns={columns} rowActions={actions} />
          <div className="flex  px-4 pt-2 justify-end">
             <Pagination 
              currentPage={1}
@@ -277,6 +289,8 @@ export default function MediaPage() {
             />
          </div>
       </div>
+
+     { isOpen && <AddToDraft isOpen={isOpen} setIsOpen={setIsOpen}/>}
     </>
   );
 } 

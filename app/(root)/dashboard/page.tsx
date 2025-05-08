@@ -6,7 +6,7 @@ import { ministries, Option } from "@/app/enum/ministry";
 
 export default function DashboardPage() {
   const router = useRouter();
-  const [selectedMinistry, setSelectedMinistry] = useState<Option | null>(null);
+  const [selectedMinistry, setSelectedMinistry] = useState<Option | null>(ministries[1]);
 
   return (
     <>
