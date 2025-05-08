@@ -1,7 +1,21 @@
 "use client";
+import Pagination from "@/app/components/elements/Pagination";
+import DynamicTable, { Column } from "@/app/components/elements/Table";
 import React, { useState } from "react";
 
-const initialPublications = [
+
+const columns: Column[] = [
+  { columnKey: "publication", columnLabel: "Publication Name" },
+];
+
+const actions = (row: any) => (
+  <div className="flex gap-2">
+    <span className="material-icons text-gray-500 cursor-pointer">edit</span>
+    <span className="material-icons text-red-500 cursor-pointer">delete</span>
+  </div>
+);
+
+const tableData = [
   { publication: "Nagaland page" },
   { publication: "The Shillong Times" },
   { publication: "Highland Post" },
@@ -13,14 +27,14 @@ export default function PublicationPage() {
   const [showModal, setShowModal] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [pub, setPub] = useState("");
-  const [editIdx, setEditIdx] = useState<number | null>(null);
+  const [editIdx, setEditIdx] = useState<number| string | null>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteIdx, setDeleteIdx] = useState<number | null>(null);
-  const [publications, setPublications] = useState(initialPublications);
+  const [publications, setPublications] = useState(tableData);
 
-  const handleEdit = (idx: number) => {
-    setEditIdx(idx);
-    setPub(publications[idx].publication);
+  const handleEdit = (idx:{ publication: string },) => {
+    setEditIdx(idx.publication);
+    setPub(idx.publication);
     setIsEditMode(true);
     setShowModal(true);
   };
@@ -146,59 +160,34 @@ export default function PublicationPage() {
 
       {/* Table */}
       <div className="bg-white rounded-lg shadow p-4 overflow-x-auto">
-        <table className="min-w-full text-sm">
-          <thead>
-            <tr className="bg-gray-50">
-              <th className="px-4 py-2 text-left font-semibold">Publication</th>
-              <th className="px-4 py-2 text-left font-semibold">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {publications.map((row, idx) => (
-              <tr key={idx} className="border-b hover:bg-gray-50">
-                <td className="px-4 py-2 font-semibold whitespace-nowrap">{row.publication}</td>
-                <td className="px-2 py-2">
-                  <div className="flex gap-2">
-                    <span
-                      className="material-icons text-yellow-600 cursor-pointer"
-                      onClick={() => handleEdit(idx)}
-                    >
-                      edit
-                    </span>
-                    <span
-                      className="material-icons text-red-500 cursor-pointer"
-                      onClick={() => handleDelete(idx)}
-                    >
-                      delete
-                    </span>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        {/* Pagination (static) */}
-        <div className="flex items-center justify-between mt-4 text-xs text-gray-600">
-          <div>Pages 1 / 47 &nbsp; Total Data: 232</div>
-          <div className="flex items-center gap-2">
-            <span>Rows Per Page</span>
-            <select className="border rounded px-1 py-0.5">
-              <option>5</option>
-              <option>10</option>
-              <option>20</option>
-            </select>
-          </div>
-          <div className="flex items-center gap-1">
-            <button className="px-2 py-1 rounded border bg-gray-100">Previous</button>
-            <button className="px-2 py-1 rounded border bg-blue-600 text-white">1</button>
-            <button className="px-2 py-1 rounded border bg-white">2</button>
-            <button className="px-2 py-1 rounded border bg-white">3</button>
-            <button className="px-2 py-1 rounded border bg-white">4</button>
-            <button className="px-2 py-1 rounded border bg-white">5</button>
-            <button className="px-2 py-1 rounded border bg-gray-100">Next</button>
+        <div className="py-2 rounded-lg  bg-white shadow">
+          <DynamicTable tableData={tableData} columns={columns} rowActions={(row) =>
+            <div className="flex gap-2">
+              <span
+                className="material-icons text-yellow-600 cursor-pointer"
+                onClick={() => handleEdit(row)}
+              >
+                edit
+              </span>
+              <span
+                className="material-icons text-red-500 cursor-pointer"
+                onClick={() => handleDelete(_idx_)}
+              >
+                delete
+              </span>
+            </div>} />
+          <div className="flex  px-4 pt-2 justify-end">
+            <Pagination
+              currentPage={1}
+              onPageChange={() => { }}
+              onPageSize={() => { }}
+              pageSize={5}
+              totalPages={10}
+            />
           </div>
         </div>
+
+
       </div>
     </div>
   );
