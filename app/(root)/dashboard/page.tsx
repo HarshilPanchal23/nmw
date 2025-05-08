@@ -44,21 +44,20 @@ export default function DashboardPage() {
           <div className="bg-white rounded-lg shadow p-4">
             <div className="font-semibold mb-2">Quick Actions</div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              {[
-                { icon: "warning", label: "View Alerts" },
-                { icon: "description", label: "Reports" },
-                { icon: "show_chart", label: "View Trends" },
-                { icon: "autorenew", label: "Media Analysis" },
-              ].map((action, i) => (
-                <button
-                  key={i}
-                  className="flex flex-col items-center bg-blue-50 text-blue-600 rounded-lg p-4 hover:bg-blue-100"
-                >
+            {[
+              { icon: "warning", label: "View Alerts", path: "/news-alerts" },
+              { icon: "description", label: "Reports", path: "/reports" },
+              { icon: "show_chart", label: "View Trends", path: "/trends" },
+              { icon: "autorenew", label: "Media Analysis", path: "/media" },
+            ].map((action, i) => (
+            <a key={i} href={action.path} className="no-underline">
+                <button className="w-full flex flex-col items-center bg-blue-50 text-blue-600 rounded-lg p-4 hover:bg-blue-100 cursor-pointer">
                   <span className="material-icons text-3xl mb-1">{action.icon}</span>
                   {action.label}
                 </button>
-              ))}
-            </div>
+              </a>
+            ))}
+  </div>
           </div>
 
           {/* News & Trending */}
@@ -83,8 +82,8 @@ export default function DashboardPage() {
                   </div>
                 ))}
               </div>
-              <div className="mt-2 text-right">
-                <a href="#" className="text-blue-600 text-sm hover:underline">
+              <div className="mt-2 text-center">
+                <a href="/media" className="text-blue-600 text-sm hover:underline">
                   View all media
                 </a>
               </div>
