@@ -1,6 +1,7 @@
 "use client";
 import Pagination from "@/app/components/elements/Pagination";
 import DynamicTable, { Column } from "@/app/components/elements/Table";
+import { createPublication } from "@/app/service/publication.api";
 import React, { useState } from "react";
 
 
@@ -52,7 +53,7 @@ export default function PublicationPage() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!pub.trim()) return;
 
     if (isEditMode && editIdx !== null) {
@@ -60,7 +61,8 @@ export default function PublicationPage() {
       updated[editIdx] = { publication: pub };
       setPublications(updated);
     } else {
-      setPublications([...publications, { publication: pub }]);
+      const response = await createPublication({ publication_name: pub });
+      console.log("response",response)
     }
 
     setPub("");
