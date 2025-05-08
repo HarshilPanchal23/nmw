@@ -6,7 +6,7 @@ import axios, {
 
 // Create axios instance
 export const api = axios.create({
-  baseURL: 'http://192.168.29.55:8000',
+  baseURL: 'http://192.168.29.55:8000/api/v1/',
 });
 
 // Request interceptor
