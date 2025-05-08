@@ -1,12 +1,11 @@
 "use client";
 import Pagination from "@/app/components/elements/Pagination";
 import DynamicTable, { Column } from "@/app/components/elements/Table";
-import { createPublication } from "@/app/service/publication.api";
-import React, { useState } from "react";
-
+import { createPublication,getPublcation,editPublication ,deletePublication} from "@/app/service/publication.api";
+import React, { useState,useEffect } from "react";
 
 const columns: Column[] = [
-  { columnKey: "publication", columnLabel: "Publication Name" },
+  { columnKey: "publication_name", columnLabel: "Publication Name" },
 ];
 
 const actions = (row: any) => (
@@ -28,28 +27,66 @@ export default function PublicationPage() {
   const [showModal, setShowModal] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [pub, setPub] = useState("");
-  const [editIdx, setEditIdx] = useState<number| string | null>(null);
+  const [editIdx, setEditIdx] = useState<number>(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteIdx, setDeleteIdx] = useState<number | null>(null);
-  const [publications, setPublications] = useState(tableData);
+  const [publications, setPublications] = useState([]);
+  const [fetchLoading, setFetchLoading] = useState(true);  const [error, setError] = useState("");
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [pageinfo, setPageinfo] = useState({
+    total_record:1
+  });
+  useEffect(() => {
+    fetchData();
+  }, []);
+  
+  const fetchData = async () => {
+    try {
+      const response = await getPublcation(pageNumber, pageSize);
+      if(response.status===200){
+        const responseData = response.data;
+        console.log("responseData",responseData)
+        if (responseData && Array.isArray(responseData.items)) {
+          setPublications(responseData.items)
+          setPageinfo(responseData.page_info)
+        } else {
+          setError("Unexpected response structure");
+          console.error("Invalid response:", response);
+        }
+      }
+    } catch (err) {
+      setError("Failed to load publications");
+      console.error(err);
+    } finally {
+      setFetchLoading(false);
+    }
+  };
 
-  const handleEdit = (idx:{ publication: string },) => {
-    setEditIdx(idx.publication);
-    setPub(idx.publication);
+  const handleEdit = (row) => {
+    console.log(row)
+    setEditIdx(row.id);
+    setPub(row.publication_name);
     setIsEditMode(true);
     setShowModal(true);
   };
 
-  const handleDelete = (idx: number) => {
-    setDeleteIdx(idx);
+  const handleDelete = (row) => {
+    setDeleteIdx(row.id);
     setShowDeleteModal(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (deleteIdx !== null) {
-      setPublications(prev => prev.filter((_, i) => i !== deleteIdx));
-      setDeleteIdx(null);
-      setShowDeleteModal(false);
+      const response= await deletePublication(deleteIdx)
+      if(response.status===200)
+      {
+        setDeleteIdx(null);
+        setShowDeleteModal(false);
+        fetchData();
+      }
+      // setPublications(prev => prev.filter((_, i) => i !== deleteIdx));
+     
     }
   };
 
@@ -57,22 +94,31 @@ export default function PublicationPage() {
     if (!pub.trim()) return;
 
     if (isEditMode && editIdx !== null) {
-      const updated = [...publications];
-      updated[editIdx] = { publication: pub };
-      setPublications(updated);
+      const response = await editPublication(editIdx,{ publication_name: pub });
+      if(response.status===201){
+        setPub("");
+        setIsEditMode(false);
+        setShowModal(false);
+        fetchData();
+      }
+    
+      // const updated = [...publications];
+      // updated[editIdx] = { publication: pub };
+      // setPublications(updated);
     } else {
       const response = await createPublication({ publication_name: pub });
       console.log("response",response)
+      if(response.status===201){
+        setPub("");
+        setShowModal(false);
+        fetchData();
+      }
     }
-
-    setPub("");
-    setEditIdx(null);
-    setIsEditMode(false);
-    setShowModal(false);
+    
   };
 
   return (
-    <div className="p-6">
+    <div>
       {/* Add/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
@@ -117,7 +163,7 @@ export default function PublicationPage() {
             <h2 className="text-xl font-bold mb-4">Delete Publication</h2>
             <p className="mb-4">
               Are you sure you want to delete{" "}
-              <span className="font-bold">{publications[deleteIdx].publication}</span>?<br />
+              {/* <span className="font-bold">{publications[deleteIdx].publication_name}</span>?<br /> */}
               This action cannot be undone.
             </p>
             <div className="flex justify-end gap-2">
@@ -163,7 +209,7 @@ export default function PublicationPage() {
       {/* Table */}
       <div className="bg-white rounded-lg shadow p-4 overflow-x-auto">
         <div className="py-2 rounded-lg  bg-white shadow">
-          <DynamicTable tableData={tableData} columns={columns} rowActions={(row) =>
+          <DynamicTable tableData={publications} columns={columns} rowActions={(row) =>
             <div className="flex gap-2">
               <span
                 className="material-icons text-yellow-600 cursor-pointer"
@@ -173,24 +219,22 @@ export default function PublicationPage() {
               </span>
               <span
                 className="material-icons text-red-500 cursor-pointer"
-                onClick={() => handleDelete(_idx_)}
+                onClick={() => handleDelete(row)}
               >
                 delete
               </span>
             </div>} />
           <div className="flex  px-4 pt-2 justify-end">
-            <Pagination
-              currentPage={1}
-              onPageChange={() => { }}
-              onPageSize={() => { }}
-              pageSize={5}
-              totalPages={10}
-            />
+          <Pagination 
+              currentPage={pageNumber}
+              totalPages={Math.round(pageinfo.total_record/pageSize)}
+              onPageSize={setPageSize}
+              pageSize={pageSize}
+              onPageChange={(e)=>setPageNumber(e)}/>
           </div>
         </div>
-
-
       </div>
     </div>
   );
 }
+
