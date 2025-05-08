@@ -35,11 +35,11 @@ export default function PublicationPage() {
   const [pageNumber, setPageNumber] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [pageinfo, setPageinfo] = useState({
-    total_record:1
+    total_count:1
   });
   useEffect(() => {
     fetchData();
-  }, []);
+  },  [pageNumber, pageSize]);
   
   const fetchData = async () => {
     try {
@@ -116,7 +116,7 @@ export default function PublicationPage() {
     }
     
   };
-
+  console.log(pageNumber,pageSize)
   return (
     <div>
       {/* Add/Edit Modal */}
@@ -227,7 +227,7 @@ export default function PublicationPage() {
           <div className="flex  px-4 pt-2 justify-end">
           <Pagination 
               currentPage={pageNumber}
-              totalPages={Math.round(pageinfo.total_record/pageSize)}
+              totalPages={Math.ceil(pageinfo.total_count/pageSize)}
               onPageSize={setPageSize}
               pageSize={pageSize}
               onPageChange={(e)=>setPageNumber(e)}/>
