@@ -177,10 +177,17 @@ export default function MinistryPage() {
         </div>
       )}
       <div className="flex justify-between gap-2 items-center mb-4">
-        <h1 className="text-2xl font-bold">Ministry</h1>
-        <button className="bg-green-600 text-white px-4 py-2 rounded font-semibold shadow hover:bg-green-700 transition flex items-center gap-1" onClick={openAddModal}>
-          <span className="material-icons">add</span>Create
-        </button>
+        <h1 className="text-2xl font-bold text-center mb-4">Ministry</h1>
+        <div className="flex justify-end gap-2 items-center mb-4">
+          <input
+            type="text"
+            placeholder="Search ministry"
+            className="border rounded px-3 py-2 text-sm w-full max-w-xs"
+          />
+          <button className="bg-green-600 text-white px-4 py-2 rounded font-semibold shadow hover:bg-green-700 transition flex items-center gap-1" onClick={openAddModal}>
+            <span className="material-icons">add</span>Create
+          </button>
+        </div>
       </div>
       <div className="bg-white rounded-lg shadow p-4 overflow-x-auto">
         <table className="min-w-full text-sm">
