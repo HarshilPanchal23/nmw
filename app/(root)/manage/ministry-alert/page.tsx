@@ -65,6 +65,8 @@ export default function MinistryAlertPage() {
   const [criticalInput, setCriticalInput] = useState("");
   const [highInput, setHighInput] = useState("");
   const [lowInput, setLowInput] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteIdx, setDeleteIdx] = useState<number | null>(null);
 
   const openAddModal = () => {
     setIsEditing(false);
@@ -267,7 +269,7 @@ export default function MinistryAlertPage() {
                 <td className="px-4 py-2">
                   <div className="flex gap-2">
                     <span className="material-icons text-yellow-600 cursor-pointer" onClick={() => openEditModal(idx)}>edit</span>
-                    <span className="material-icons text-red-500 cursor-pointer">delete</span>
+                    <span className="material-icons text-red-500 cursor-pointer" onClick={() => { setDeleteIdx(idx); setShowDeleteModal(true); }}>delete</span>
                   </div>
                 </td>
               </tr>
@@ -275,6 +277,44 @@ export default function MinistryAlertPage() {
           </tbody>
         </table>
       </div>
+      {/* Delete Alert Keywords Modal */}
+      {showDeleteModal && deleteIdx !== null && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative">
+            <button
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-xl"
+              onClick={() => setShowDeleteModal(false)}
+            >
+              &times;
+            </button>
+            <div className="flex items-center mb-3">
+              <span className="material-icons text-red-500 mr-2 text-2xl">warning</span>
+              <h2 className="text-xl font-bold">Delete Alert Keywords</h2>
+            </div>
+            <p className="mb-6">
+              Are you sure you want to delete all alert keywords for <b>{alerts[deleteIdx].ministry}</b>? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-2">
+              <button
+                className="bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded font-semibold"
+                onClick={() => setShowDeleteModal(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-red-600 text-white px-6 py-2 rounded font-semibold"
+                onClick={() => {
+                  setAlerts(alerts.filter((_, i) => i !== deleteIdx));
+                  setShowDeleteModal(false);
+                  setDeleteIdx(null);
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 } 
