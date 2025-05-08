@@ -1,68 +1,77 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosResponse,
+  AxiosRequestConfig
+} from 'axios';
 
-  // Create axios instance
-  export const api = axios.create({
-    baseURL: 'http://192.168.29.55:8000'
-  });
+// Create axios instance
+export const api = axios.create({
+  baseURL: 'http://192.168.29.55:8000',
+});
 
-  api.interceptors.request.use(
-      (config) => {
-        // You can add request logging or modify config here
-        console.log('Sending request to:', config.url);
-        return config;
-      },
-      (error) => {
-        console.error('Request error:', error);
-        return Promise.reject(error);
-      }
-    );
+// Request interceptor
+api.interceptors.request.use(
+  (config: any) => {
+    return config;
+  },
+  (error: AxiosError) => {
+    console.error('Request error:', error);
+    return Promise.reject(error);
+  }
+);
 
-  // Response interceptor (simplified)
-  api.interceptors.response.use(
-      (response) => {
-        // Just return the data from the response
-        return response.data;
-      },
-      (error) => {
-        // Basic error handling
-        if (error.response) {
-          // Server responded with error status
-          console.error('API Error:', {
-            status: error.response.status,
-            message: error.response.data?.message || 'Unknown error',
-          });
-        } else if (error.request) {
-          // Request was made but no response received
-          console.error('No response received:', error.request);
-        } else {
-          // Something else went wrong
-          console.error('Request setup error:', error.message);
-        }
-        
-        return Promise.reject(error);
-      }
-    );  
+// Response interceptor
+api.interceptors.response.use(
+  (response: AxiosResponse) => {
+    return response.data;
+  },
+  (error: AxiosError) => {
+    if (error.response) {
+      console.error('API Error:', {
+        status: error.response.status,
+        message: (error.response.data as any)?.message || 'Unknown error',
+      });
+    } else if (error.request) {
+      console.error('No response received:', error.request);
+    } else {
+      console.error('Request setup error:', error.message);
+    }
 
-    const requestConfig = (options) => {
-      const config = {
-          // headers: options.headers || { "Content-Type": "application/json" },
-          url: options.url,
-          method: options.method,
-          ...options,
-      };
+    return Promise.reject(error);
+  }
+);
 
-      if (options.body) config.data = options.body;
-      if (options.params) config.params = options.params;
-      
-      return config;
+// Options interface
+interface Options {
+  url: string;
+  method: 'POST' | 'PUT' | 'GET' | 'PATCH' | 'DELETE';
+  body?: object;
+  params?: any;
+  headers?: Record<string, string>;
+}
+
+// Generate Axios config
+const requestConfig = (options: Options): AxiosRequestConfig => {
+  const config: AxiosRequestConfig = {
+    url: options.url,
+    method: options.method,
+    headers: options.headers || { 'Content-Type': 'application/json' },
+    data: options.body,
+    params: options.params,
   };
-  export const request = (options) => {
-      const config = requestConfig(options);
-      if (navigator.onLine) {
-          return api.request(config);
-      }
-      return {
-          status: false,
-          message: "Internet Disconnected",
-      };
-  };
+
+  return config;
+};
+
+// Request function
+export const request = async (options: Options): Promise<any> => {
+  if (!navigator.onLine) {
+    return Promise.reject({
+      status: false,
+      message: 'Internet Disconnected',
+    });
+  }
+
+  const config = requestConfig(options);
+  return api.request(config);
+};
